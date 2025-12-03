@@ -1,9 +1,11 @@
 
 const Task = require("../models/taskModel")
 
+const { Op } = require('sequelize')
+
 
 const createTask = async (req, res) => {
-    console.log(req.body)
+
     try {
         const newTask = await Task.create(req.body)
         if (newTask) {
@@ -67,8 +69,6 @@ const queryTaskTitle = async (req, res) => {
 const updateTask = async (req, res) => {
     const ID = req.params.ID
     const { status, priority, startDate, endDate } = req.body
-    console.log(req.body)
-    console.log(ID)
 
     try {
         const [updatedTask] = await Task.update({ status, priority, startDate, endDate }, { where: { id: ID } })
@@ -103,5 +103,62 @@ const deleteTask = async (req, res) => {
     }
 }
 
+const getCompletedTasks = async (req, res) => {
+    try {
+        const tasks = await Task.findAll({ where: { status: "Completed" } })
 
-module.exports = { createTask, deleteTask, getAllTasks, getTaskById, updateTask, queryTaskTitle }
+        res.status(200).send({ tasks: tasks, success: true })
+
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
+
+    }
+}
+
+const getHighestPriorityTasks = async (req, res) => {
+    try {
+        const tasks = await Task.findAll({ where: { priority: "Critical" } })
+        res.status(200).send({ tasks: tasks, success: true })
+
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
+
+    }
+}
+
+const getTasksCompletedBetween = async (req, res) => {
+    const { startDate, endDate } = req.query
+    try {
+        if (!startDate || !endDate) {
+            res.status(400).json({ error: "startDate and endDate are required" });
+        }
+
+        const tasks = await Task.findAll({ where: { status: "Completed" }, endDate: { [Op.between]: [new Date(startDate), new Date(endDate)] } })
+
+        res.status(200).send({ tasks: tasks, success: true })
+
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
+
+    }
+}
+
+
+
+
+
+
+
+
+
+module.exports = {
+    createTask,
+    deleteTask,
+    getAllTasks,
+    getTaskById,
+    updateTask,
+    queryTaskTitle,
+    getCompletedTasks,
+    getHighestPriorityTasks,
+    getTasksCompletedBetween
+}

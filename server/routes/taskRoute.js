@@ -9,12 +9,16 @@ router.get("/getTaskById/:ID", taskController.getTaskById)
 router.put("/updateTask/:ID", taskController.updateTask)
 router.delete("/deleteTask/:ID", taskController.deleteTask)
 
-router.get("/queryTaskTitel",taskController.queryTaskTitle)
+router.get("/queryTaskTitel", taskController.queryTaskTitle)
 
 
-// router.get("/taskOfUser")
+// New apis 
 
+router.get('/getCompletdTasks', taskController.getCompletedTasks)
 
+router.get('/getHighestPriorityTasks', taskController.getHighestPriorityTasks)
+
+router.get('/completedBetween', taskController.getTasksCompletedBetween)
 
 
 
