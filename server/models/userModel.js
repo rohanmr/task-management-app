@@ -1,4 +1,5 @@
 const { DataTypes } = require("sequelize")
+const bcrypt = require('bcryptjs')
 
 const { sequelize } = require("../config/db")
 
@@ -27,14 +28,25 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    contactNumber: {
+        type: DataTypes.STRING,
+
+    },
+
     address: {
         type: DataTypes.STRING,
-        allowNull: true
 
     }
 
 
 }, { tableName: "users", timestamps: true })
+
+
+User.beforeCreate(async (user) => {
+    if (user.password) {
+        user.password = await bcrypt.hash(user.password, 10)
+    }
+})
 
 
 module.exports = User
