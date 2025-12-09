@@ -13,7 +13,6 @@ router.get("/queryTaskTitel", taskController.queryTaskTitle)
 
 
 // New apis 
-
 router.get('/getCompletdTasks', taskController.getCompletedTasks)
 
 router.get('/getHighestPriorityTasks', taskController.getHighestPriorityTasks)

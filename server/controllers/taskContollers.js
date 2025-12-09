@@ -9,12 +9,12 @@ const createTask = async (req, res) => {
     try {
         const newTask = await Task.create(req.body)
         if (newTask) {
-            res.status(201).send({ msg: "Task Created Succesfully", success: true })
+            return res.status(201).send({ msg: "Task Created Succesfully", success: true })
         } else {
-            res.send(400).send({ msg: "Error While Task Creating", success: false })
+            return res.send(400).send({ msg: "Error While Task Creating", success: false })
         }
     } catch (error) {
-        res.status(500).send({ msg: "Internal Server Error", success: false })
+        return res.status(500).send({ msg: "Internal Server Error", success: false })
 
     }
 }
@@ -24,10 +24,10 @@ const createTask = async (req, res) => {
 const getAllTasks = async (req, res) => {
     try {
         const tasks = await Task.findAll({ attributes: ['id', 'title', 'description', 'status', 'priority', 'startDate', 'endDate'] })
-        res.status(200).send({ taks: tasks, success: true })
+        return res.status(200).send({ taks: tasks, success: true })
 
     } catch (error) {
-        res.status(500).send({ msg: "Internal Server Error", success: false })
+        return res.status(500).send({ msg: "Internal Server Error", success: false })
     }
 }
 
@@ -36,12 +36,12 @@ const getTaskById = async (req, res) => {
     try {
         const task = await Task.findByPk(id)
         if (!task) {
-            res.status(400).send({ mes: "Task Not Found" })
+            return res.status(400).send({ mes: "Task Not Found" })
         }
-        res.status(200).send({ task: task, success: true })
+        return res.status(200).send({ task: task, success: true })
 
     } catch (error) {
-        res.status(500).send("Internal Server Error")
+        return res.status(500).send("Internal Server Error")
 
     }
 }
@@ -55,13 +55,13 @@ const queryTaskTitle = async (req, res) => {
         const taskByTitel = await Task.findOne({ where: { title: titelName } })
 
         if (!taskByTitel) {
-            res.status(400).send({ msg: 'Task Not Found', success: false })
+            return res.status(400).send({ msg: 'Task Not Found', success: false })
 
         }
 
-        res.status(200).send({ task: taskByTitel, success: true })
+        return res.status(200).send({ task: taskByTitel, success: true })
     } catch (error) {
-        res.status(500).send("Internal Server Error")
+        return res.status(500).send("Internal Server Error")
     }
 }
 
@@ -74,14 +74,14 @@ const updateTask = async (req, res) => {
         const [updatedTask] = await Task.update({ status, priority, startDate, endDate }, { where: { id: ID } })
 
         if (updatedTask === 0) {
-            res.status(400).send({ msg: "Task Not Found" })
+            return res.status(400).send({ msg: "Task Not Found" })
         }
 
-        res.status(200).send({ success: true, msg: "Task Updated Successfully" })
+        return res.status(200).send({ success: true, msg: "Task Updated Successfully" })
 
 
     } catch (error) {
-        res.status(500).send("Internal Server Error")
+        return res.status(500).send("Internal Server Error")
 
     }
 }
@@ -93,12 +93,12 @@ const deleteTask = async (req, res) => {
         const deletedTask = await Task.destroy({ where: { id: ID } })
 
         if (!deletedTask) {
-            res.status(400).send({ msg: "Task Not Found", success: false })
+            return res.status(400).send({ msg: "Task Not Found", success: false })
         }
-        res.status(200).send({ msg: "Task Deleted Succesfully", success: true })
+        return res.status(200).send({ msg: "Task Deleted Succesfully", success: true })
 
     } catch (error) {
-        res.status(500).send("Internal Server Error")
+        return res.status(500).send("Internal Server Error")
 
     }
 }
@@ -107,10 +107,10 @@ const getCompletedTasks = async (req, res) => {
     try {
         const tasks = await Task.findAll({ where: { status: "Completed" } })
 
-        res.status(200).send({ tasks: tasks, success: true })
+        return res.status(200).send({ tasks: tasks, success: true })
 
     } catch (error) {
-        res.status(500).send("Internal Server Error")
+        return res.status(500).send("Internal Server Error")
 
     }
 }
@@ -118,10 +118,10 @@ const getCompletedTasks = async (req, res) => {
 const getHighestPriorityTasks = async (req, res) => {
     try {
         const tasks = await Task.findAll({ where: { priority: "Critical" } })
-        res.status(200).send({ tasks: tasks, success: true })
+        return res.status(200).send({ tasks: tasks, success: true })
 
     } catch (error) {
-        res.status(500).send("Internal Server Error")
+        return res.status(500).send("Internal Server Error")
 
     }
 }
@@ -130,15 +130,15 @@ const getTasksCompletedBetween = async (req, res) => {
     const { startDate, endDate } = req.query
     try {
         if (!startDate || !endDate) {
-            res.status(400).json({ error: "startDate and endDate are required" });
+            return res.status(400).json({ error: "startDate and endDate are required" });
         }
 
         const tasks = await Task.findAll({ where: { status: "Completed" }, endDate: { [Op.between]: [new Date(startDate), new Date(endDate)] } })
 
-        res.status(200).send({ tasks: tasks, success: true })
+        return res.status(200).send({ tasks: tasks, success: true })
 
     } catch (error) {
-        res.status(500).send("Internal Server Error")
+        return res.status(500).send("Internal Server Error")
 
     }
 }
