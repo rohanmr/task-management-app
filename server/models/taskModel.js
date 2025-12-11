@@ -34,6 +34,23 @@ const Task = sequelize.define("Task", {
     endDate: {
         type: DataTypes.DATE
     },
+    createdBy: {
+        type: DataTypes.BIGINT.UNSIGNED,
+        allowNull: true,
+        references: {
+            model: 'users',
+            key: 'id'
+        }
+    },
+    updatedBy: {
+        type: DataTypes.BIGINT.UNSIGNED,
+        allowNull: true,
+        references: {
+            model: 'users',
+            key: 'id'
+
+        }
+    }
 
 }, {
     tableName: 'tasks',
