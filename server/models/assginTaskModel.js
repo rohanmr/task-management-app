@@ -1,7 +1,6 @@
 const { sequelize } = require('../config/db')
 const { DataTypes } = require('sequelize')
 
-
 const AssignTask = sequelize.define('AssignTask', {
     id: {
         type: DataTypes.BIGINT.UNSIGNED,
@@ -10,38 +9,24 @@ const AssignTask = sequelize.define('AssignTask', {
     },
     taskId: {
         type: DataTypes.BIGINT.UNSIGNED,
-        allowNull: false,
-        references: {
-            model: "tasks",
-            key: 'id'
-        }
+        allowNull: false
     },
     userId: {
         type: DataTypes.BIGINT.UNSIGNED,
-        allowNull: false,
-        references: {
-            model: 'users',
-            key: 'id'
-        }
+        allowNull: false
     },
     createdBy: {
         type: DataTypes.BIGINT.UNSIGNED,
-        allowNull: true,
-        references: {
-            model: 'users',
-            key: 'id'
-        }
+        allowNull: true
     },
     updatedBy: {
         type: DataTypes.BIGINT.UNSIGNED,
-        allowNull: true,
-        references: {
-            model: "users",
-            key: "id"
-        }
+        allowNull: true
     }
 
-}, { timestamps: true, tableName: "assignTasks" })
-
+}, {
+    tableName: 'assignTasks',
+    timestamps: true
+})
 
 module.exports = AssignTask

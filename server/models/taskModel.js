@@ -9,6 +9,7 @@ const Task = sequelize.define("Task", {
         primaryKey: true,
         autoIncrement: true
     },
+
     title: {
         type: DataTypes.STRING(200),
         allowNull: false,
@@ -37,19 +38,11 @@ const Task = sequelize.define("Task", {
     createdBy: {
         type: DataTypes.BIGINT.UNSIGNED,
         allowNull: true,
-        references: {
-            model: 'users',
-            key: 'id'
-        }
+
     },
     updatedBy: {
         type: DataTypes.BIGINT.UNSIGNED,
         allowNull: true,
-        references: {
-            model: 'users',
-            key: 'id'
-
-        }
     }
 
 }, {

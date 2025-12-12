@@ -5,9 +5,9 @@ const { Op } = require('sequelize')
 
 
 const createTask = async (req, res) => {
-
+    const { title, description, status, priority, startDate, endDate } = req.body
     try {
-        const newTask = await Task.create(req.body)
+        const newTask = await Task.create({ title, description, status, priority, startDate, endDate, createdBy: req.user.id })
         if (newTask) {
             return res.status(201).send({ msg: "Task Created Succesfully", success: true })
         } else {

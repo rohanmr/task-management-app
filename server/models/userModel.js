@@ -40,6 +40,10 @@ const User = sequelize.define('User', {
     role: {
         type: DataTypes.ENUM("user", "admin"),
         defaultValue: 'user'
+    },
+    updatedBy: {
+        type: DataTypes.BIGINT.UNSIGNED,
+        allowNull: true
     }
 
 

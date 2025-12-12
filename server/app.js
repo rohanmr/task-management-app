@@ -4,6 +4,7 @@ const cors = require("cors")
 const app = express()
 const taskRouter = require("./routes/taskRoute")
 const userRouter = require("./routes/userRoute")
+const assignTaskRoute = require("./routes/assignTaskRoute")
 const { testConnection } = require("./config/db")
 testConnection()
 
@@ -17,6 +18,7 @@ port = process.env.PORT || 7000
 
 app.use("/api/tasks", taskRouter)
 app.use("/api/user", userRouter)
+app.use("/api/assign",assignTaskRoute)
 
 
 app.listen(port, () => {
