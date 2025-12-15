@@ -1,5 +1,4 @@
 
-const { where } = require('sequelize')
 const { User } = require('../models')
 const AssignTask = require('../models/assginTaskModel')
 const Task = require('../models/taskModel')
