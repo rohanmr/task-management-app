@@ -1,7 +1,7 @@
 
 const Task = require("../models/taskModel")
 
-const { Op } = require('sequelize')
+const { Op, where } = require('sequelize')
 
 
 const createTask = async (req, res) => {
@@ -11,7 +11,7 @@ const createTask = async (req, res) => {
         if (newTask) {
             return res.status(201).send({ msg: "Task Created Succesfully", success: true })
         } else {
-            return res.send(400).send({ msg: "Error While Task Creating", success: false })
+            return res.send(202).send({ msg: "Error While Task Creating", success: false })
         }
     } catch (error) {
         return res.status(500).send({ msg: "Internal Server Error", success: false })
@@ -36,7 +36,7 @@ const getTaskById = async (req, res) => {
     try {
         const task = await Task.findByPk(id)
         if (!task) {
-            return res.status(400).send({ mes: "Task Not Found" })
+            return res.status(201).send({ mes: "Task Not Found" })
         }
         return res.status(200).send({ task: task, success: true })
 
@@ -55,7 +55,7 @@ const queryTaskTitle = async (req, res) => {
         const taskByTitel = await Task.findOne({ where: { title: titelName } })
 
         if (!taskByTitel) {
-            return res.status(400).send({ msg: 'Task Not Found', success: false })
+            return res.status(202).send({ msg: 'Task Not Found', success: false })
 
         }
 
@@ -74,7 +74,7 @@ const updateTask = async (req, res) => {
         const [updatedTask] = await Task.update({ status, priority, startDate, endDate }, { where: { id: ID } })
 
         if (updatedTask === 0) {
-            return res.status(400).send({ msg: "Task Not Found" })
+            return res.status(202).send({ msg: "Task Not Found" })
         }
 
         return res.status(200).send({ success: true, msg: "Task Updated Successfully" })
@@ -93,7 +93,7 @@ const deleteTask = async (req, res) => {
         const deletedTask = await Task.destroy({ where: { id: ID } })
 
         if (!deletedTask) {
-            return res.status(400).send({ msg: "Task Not Found", success: false })
+            return res.status(202).send({ msg: "Task Not Found", success: false })
         }
         return res.status(200).send({ msg: "Task Deleted Succesfully", success: true })
 
@@ -130,7 +130,7 @@ const getTasksCompletedBetween = async (req, res) => {
     const { startDate, endDate } = req.query
     try {
         if (!startDate || !endDate) {
-            return res.status(400).json({ error: "startDate and endDate are required" });
+            return res.status(202).json({ error: "startDate and endDate are required" });
         }
 
         const tasks = await Task.findAll({ where: { status: "Completed" }, endDate: { [Op.between]: [new Date(startDate), new Date(endDate)] } })
@@ -143,6 +143,24 @@ const getTasksCompletedBetween = async (req, res) => {
     }
 }
 
+const statusUpdate = async (req, res) => {
+    const { ID } = req.params
+    const { status } = req.body
+
+    try {
+        const updatedSatus = await Task.update({ status: status }, { where: { id: ID } })
+
+        if (updatedSatus === 0) {
+            return res.status(202).send({ msg: "Task Not Found" })
+        }
+
+        return res.status(200).send({ msg: "Status Updated Successfully", success: true })
+
+    } catch (error) {
+        return res.status(500).send("Internal Server Error")
+
+    }
+}
 
 
 
@@ -160,5 +178,6 @@ module.exports = {
     queryTaskTitle,
     getCompletedTasks,
     getHighestPriorityTasks,
-    getTasksCompletedBetween
+    getTasksCompletedBetween,
+    statusUpdate
 }

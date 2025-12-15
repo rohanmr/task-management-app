@@ -8,12 +8,12 @@ const assignTask = async (req, res) => {
     try {
         const { taskId, userId } = req.body
         if (!taskId || !userId) {
-            res.status(400).send({ msg: "Missing TaskID and UserId" })
+            res.status(202).send({ msg: "Missing TaskID and UserId" })
         }
 
         await AssignTask.create({ taskId, userId, createdBy: req.user.id })
 
-        res.status(200).send({ msg: "Task Assigned Successfully ", success: true })
+        res.status(201).send({ msg: "Task Assigned Successfully ", success: true })
 
     } catch (error) {
         return res.status(500).send({ msg: "Internal Server Error", success: false })
@@ -85,13 +85,13 @@ const updateAssignTask = async (req, res) => {
 
     try {
         if (!status) {
-            return res.status(400).send({ msg: "Status Is Require" })
+            return res.status(202).send({ msg: "Status Is Require" })
         }
         const [updateTask] = await Task.update({ status: status, updatedBy: req.user.id }, { where: { id: taskId } })
 
 
         if (updateTask === 0) {
-            return res.status(400).send({ msg: "Task Not Found" })
+            return res.status(202).send({ msg: "Task Not Found" })
         }
 
         await AssignTask.update({ updatedBy: req.user.id }, { where: { taskId } })
@@ -112,7 +112,7 @@ const deleteAssignTask = async (req, res) => {
         const deleteAssignTask = await AssignTask.destroy({ where: { id: asTaskId } })
 
         if (!deleteAssignTask) {
-            return res.status(400).send({ msg: "Task not found" })
+            return res.status(202).send({ msg: "Task not found" })
         }
 
         return res.status(200).send({ msg: "Assigned Task deleted suucessfully", success: true })

@@ -14,18 +14,20 @@ router.put("/updateTask/:ID", auth, admin, taskController.updateTask)
 
 router.delete("/deleteTask/:ID", auth, admin, taskController.deleteTask)
 
-router.get("/queryTaskTitel",auth, taskController.queryTaskTitle)
+router.get("/queryTaskTitel", auth, taskController.queryTaskTitle)
 
 
 // New apis 
-router.get('/getCompletdTasks',auth,admin, taskController.getCompletedTasks)
+router.get('/getCompletdTasks', auth, admin, taskController.getCompletedTasks)
 
-router.get('/getHighestPriorityTasks',auth, taskController.getHighestPriorityTasks)
+router.get('/getHighestPriorityTasks', auth, taskController.getHighestPriorityTasks)
 
-router.get('/completedBetween',auth,admin, taskController.getTasksCompletedBetween)
+router.get('/completedBetween', auth, admin, taskController.getTasksCompletedBetween)
 
-// router.patch("/statusUpdate/:ID",)
+//Added New Api
 
-// router.get("/getTasksByAssignedUsers,auth")
+router.patch("/statusUpdate/:ID", auth, admin, taskController.statusUpdate)
+
+
 
 module.exports = router

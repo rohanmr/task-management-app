@@ -7,7 +7,7 @@ const register = async (req, res) => {
     try {
 
         if (!name || !email || !password) {
-            return res.status(400).send({ msg: "Please provide name, email and password", success: false })
+            return res.status(202).send({ msg: "Please provide name, email and password", success: false })
         }
 
         const existingUser = await User.findOne({ where: { email } })
@@ -35,13 +35,13 @@ const login = async (req, res) => {
         const getUser = await User.findOne({ where: { email } })
 
         if (!getUser) {
-            return res.status(400).send({ msg: "Invalid credentials", success: false })
+            return res.status(202).send({ msg: "Invalid credentials", success: false })
         }
 
         const checkPassword = await bcrypt.compare(password, getUser.password)
 
         if (!checkPassword) {
-            return res.status(400).send({ msg: "Invalid credentials", success: false })
+            return res.status(202).send({ msg: "Invalid credentials", success: false })
         }
 
         const loggedUser = {
@@ -80,7 +80,7 @@ const getUserInfo = async (req, res) => {
         const user = await User.findOne({ where: { id: userId }, attributes: ['id', 'name', 'email', 'contactNumber', 'address', 'role'] })
 
         if (!user) {
-            return res.status(400).send({ msg: "User id not Found", success: false })
+            return res.status(404).send({ msg: "User id not Found", success: false })
         }
 
         return res.status(200).send({ success: true, user: user })
@@ -101,7 +101,7 @@ const updateUser = async (req, res) => {
         const [updatedUser] = await User.update({ name, contactNumber, address }, { where: { id: ID } })
 
         if (updatedUser === 0) {
-            return res.status(400).send({ msg: "User Not Found" })
+            return res.status(404).send({ msg: "User Not Found" })
         }
 
         return res.status(200).send({ msg: "User updated Successfully", success: true })
@@ -120,7 +120,7 @@ const deleteUser = async (req, res) => {
     try {
         const deletedUser = await User.destroy({ where: { id: ID } })
         if (!deletedUser) {
-            return res.status(400).send({ msg: "User Not Found", success: true })
+            return res.status(404).send({ msg: "User Not Found", success: true })
         }
 
         return res.status(200).send({ msg: "User Deleted Successfully", success: true })
