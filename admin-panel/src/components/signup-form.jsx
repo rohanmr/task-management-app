@@ -106,21 +106,23 @@ export function SignupForm({ className, ...props }) {
                     )}
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="contactNo">Contact Number</FieldLabel>
+                    <FieldLabel htmlFor="contactNumber">
+                      Contact Number
+                    </FieldLabel>
                     <Input
-                      id="contactNo"
+                      id="contactNumber"
                       type="text"
                       placeholder="Enter contact no"
-                      {...register("contactNo", {
+                      {...register("contactNumber", {
                         required: "Contact no is required",
                         minLength: {
                           value: 10,
                         },
                       })}
                     />
-                    {errors.contactno && (
+                    {errors.contactNumber && (
                       <p className="text-sm text-red-500">
-                        {errors.contactNo.message}
+                        {errors.contactNumber.message}
                       </p>
                     )}
                   </Field>

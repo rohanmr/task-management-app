@@ -6,11 +6,14 @@ import "@fontsource/inter/400.css";
 import "@fontsource/inter/700.css";
 import "./index.css";
 import App from "./App.jsx";
+import UserProvider from "@/context/userProvider";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <StrictMode>
-      <App />
+      <UserProvider>
+        <App />
+      </UserProvider>
     </StrictMode>
   </BrowserRouter>
 );

@@ -1,25 +1,26 @@
-import axiosInstance from "@/api/axiosInstance";
+import api from "@/api/apiAgent";
 
 
 const sleep = () => {
     return new Promise((resolve) => {
-        setTimeout(resolve, 5000);
+        setTimeout(resolve, 3000);
     });
 };
 
 // Register User
 export const registerUser = async (data) => {
     await sleep()
-    return axiosInstance.post("/user/register", data);
+    return api.post("/user/register", data);
 };
 
 // Login user 
 export const loginUser = async (data) => {
     await sleep();
-    return axiosInstance.post("/user/login", data)
+    return api.post("/user/login", data)
 }
 
 // User info 
-export const getUserInfo = async () => {
+export const getUserInfo = () => {
+    return api.get("/user/getUserInfo")
 
 }

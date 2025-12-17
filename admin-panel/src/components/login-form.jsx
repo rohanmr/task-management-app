@@ -15,7 +15,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { loginUser } from "@/api/userApi";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { userContext } from "@/context/userProvider";
 
 export function LoginForm({ className, ...props }) {
   const [loading, setLoading] = useState(false);
@@ -27,13 +28,16 @@ export function LoginForm({ className, ...props }) {
 
   const navigate = useNavigate();
 
+  const { fetchUser } = useContext(userContext);
+
   const handelLoginForm = async (data) => {
     setLoading(true);
     loginUser(data).then((res) => {
       if (res.data.success) {
         toast.success(res.data.msg);
         localStorage.setItem("token", res.data.token);
-        navigate("/dashboard");
+        fetchUser();
+        navigate("/dashboard/home");
       } else {
         toast.error(res.data.msg);
       }
