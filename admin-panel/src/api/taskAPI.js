@@ -24,3 +24,9 @@ export const deleteTask = async (data) => {
     await sleep()
     return api.delete(`tasks/deleteTask/${data}`)
 }
+
+//Update Task
+export const updateTask = async (taskId, data) => {
+    await sleep()
+    return api.put(`tasks/updateTask/${taskId}`, data)
+}

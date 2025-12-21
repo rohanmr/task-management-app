@@ -80,8 +80,14 @@ const updateTask = async (req, res) => {
     const ID = req.params.ID
     const { status, priority, startDate, endDate } = req.body
 
+    const startDateParts = startDate.split('/');
+    const formattedStartDate = startDateParts[2] + '-' + startDateParts[1] + '-' + startDateParts[0] + " 00:00:00Z";
+
+    const endDateParts = endDate.split('/');
+    const formattedEndDate = endDateParts[2] + '-' + endDateParts[1] + '-' + endDateParts[0] + " 00:00:00Z";
+
     try {
-        const [updatedTask] = await Task.update({ status, priority, startDate, endDate }, { where: { id: ID } })
+        const [updatedTask] = await Task.update({ status, priority, startDate: formattedStartDate, endDate: formattedEndDate }, { where: { id: ID } })
 
         if (updatedTask === 0) {
             return res.status(202).send({ msg: "Task Not Found" })

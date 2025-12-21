@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
-import { EditModel } from "@/components/edit-model";
+// import { EditModel } from "@/components/edit-task-model";
 import { DeleteModel } from "@/components/delete-model";
 
 const ITEMS_PER_PAGE = 6;
@@ -113,12 +113,13 @@ const UserPage = () => {
                       </Button>
                     </TableCell>
                     <TableCell className={"space-x-2 flex"}>
-                      <EditModel
+                      <PencilIcon />
+                      {/* <EditModel
                         title="Edit Task"
                         description="Make changes in your task here."
                         icon={<PencilIcon />}
                         taskId={item.id}
-                      />
+                      /> */}
                       <DeleteModel
                         title="Delete Task"
                         description="Do you want to delete your task"

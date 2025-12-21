@@ -1,4 +1,4 @@
-import { getAllTasks } from "@/api/taskAPI";
+import { getAllTasks, updateTask } from "@/api/taskAPI";
 import React, { useEffect, useState } from "react";
 import { deleteTask } from "@/api/taskAPI";
 
@@ -32,10 +32,10 @@ import {
 } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
-import { EditModel } from "@/components/edit-model";
+import { EditTaskModel } from "@/components/edit-task-model";
 import { DeleteModel } from "@/components/delete-model";
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 8;
 
 const TaskListPage = () => {
   const [loading, setLoaing] = useState(false);
@@ -60,6 +60,18 @@ const TaskListPage = () => {
       console.error("Failed to fetch tasks", error);
       setLoaing(false);
     }
+  };
+
+  const handelDeleteSuccess = (deletedId) => {
+    return setTaskList((prv) => prv.filter((task) => task.id !== deletedId));
+  };
+
+  const handelUpdateSuccess = (updatedTask) => {
+    return setTaskList((prev) =>
+      prev.map((task) =>
+        task.id === updatedTask.id ? { ...task, ...updatedTask } : task
+      )
+    );
   };
 
   const toLocalISODate = (date) => {
@@ -152,11 +164,16 @@ const TaskListPage = () => {
                     <TableCell>{toLocalISODate(item.endDate)}</TableCell>
 
                     <TableCell className={"space-x-2 flex"}>
-                      <EditModel
+                      <EditTaskModel
                         title="Edit Task"
-                        description="Make changes in your task here."
                         icon={<PencilIcon />}
                         taskId={item.id}
+                        existingTitle={item.title}
+                        startDate={toLocalISODate(item.startDate)}
+                        endDate={toLocalISODate(item.endDate)}
+                        priority={item.priority}
+                        status={item.status}
+                        onSuccess={handelUpdateSuccess}
                       />
                       <DeleteModel
                         title="Delete Task"
@@ -164,6 +181,7 @@ const TaskListPage = () => {
                         icon={<Trash2 />}
                         taskId={item.id}
                         onDelete={deleteTask}
+                        onSuccess={handelDeleteSuccess}
                       />
                     </TableCell>
                   </TableRow>
@@ -172,7 +190,7 @@ const TaskListPage = () => {
             </Table>
           )}
 
-          <div className="flex items-center justify-between px-2 py-3">
+          <div className="flex items-center justify-between px-2 pt-1">
             <p className="text-sm text-muted-foreground">
               Page {currentPage} of {totalPages}
             </p>

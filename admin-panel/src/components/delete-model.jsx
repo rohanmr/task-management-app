@@ -13,7 +13,14 @@ import {
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
 
-export function DeleteModel({ title, description, taskId, icon, onDelete }) {
+export function DeleteModel({
+  title,
+  description,
+  taskId,
+  icon,
+  onDelete,
+  onSuccess,
+}) {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -24,6 +31,7 @@ export function DeleteModel({ title, description, taskId, icon, onDelete }) {
 
       if (res?.data?.success) {
         toast.success(res.data.msg);
+        onSuccess?.(taskId);
         setOpen(false);
       } else {
         toast.error(res?.data?.msg || "Delete failed");
