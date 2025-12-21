@@ -8,8 +8,8 @@ const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   const fetchUser = async () => {
-    const userInfo = await getUserInfo();
-    setUser(userInfo.data.user);
+    const res = await getUserInfo();
+    setUser(res.data.user);
   };
 
   return (

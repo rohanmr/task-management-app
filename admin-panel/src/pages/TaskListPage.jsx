@@ -1,5 +1,7 @@
 import { getAllTasks } from "@/api/taskAPI";
 import React, { useEffect, useState } from "react";
+import { deleteTask } from "@/api/taskAPI";
+
 import {
   Table,
   TableBody,
@@ -8,9 +10,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { PencilIcon, Trash2 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Spinner } from "@/components/ui/spinner";
+
+import { PencilIcon, Trash2, EllipsisVertical } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 import {
   Card,
@@ -26,24 +37,24 @@ import { DeleteModel } from "@/components/delete-model";
 
 const ITEMS_PER_PAGE = 6;
 
-const UserPage = () => {
+const TaskListPage = () => {
   const [loading, setLoaing] = useState(false);
-  const [userList, setUserList] = useState([]);
+  const [taskList, setTaskList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const totalData = userList.length;
+  const totalData = taskList.length;
   const totalPages = Math.ceil(totalData / ITEMS_PER_PAGE);
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
 
-  const currentData = userList.slice(startIndex, endIndex);
+  const currentData = taskList.slice(startIndex, endIndex);
 
   const fetchTasks = async () => {
     setLoaing(true);
     try {
       const res = await getAllTasks();
-      setUserList(res.data.tasks);
+      setTaskList(res.data.tasks);
       setLoaing(false);
     } catch (error) {
       console.error("Failed to fetch tasks", error);
@@ -66,8 +77,8 @@ const UserPage = () => {
     <>
       <Card className="flex flex-col">
         <CardHeader className="items-center pb-0">
-          <CardTitle>All User List</CardTitle>
-          <CardDescription>Users in the TMS</CardDescription>
+          <CardTitle>All Task List</CardTitle>
+          <CardDescription>Tasks Creatd by Admin</CardDescription>
         </CardHeader>
 
         <CardContent className="flex-1 pb-0">
@@ -83,9 +94,10 @@ const UserPage = () => {
                   <TableHead>Description</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Priority</TableHead>
+                  <TableHead>Assign To</TableHead>
                   <TableHead>Start Date</TableHead>
                   <TableHead>End Date</TableHead>
-                  <TableHead>Assign Task</TableHead>
+
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -101,17 +113,44 @@ const UserPage = () => {
                     </TableCell>
                     <TableCell>{item.status}</TableCell>
                     <TableCell>{item.priority}</TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className={"cursor-pointer"}
+                          >
+                            Assign <EllipsisVertical />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel
+                            className={"font-medium text-center"}
+                          >
+                            Assign Task To User
+                          </DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem>
+                            <Avatar className="cursor-pointer">
+                              <AvatarImage src="https://github.com/shadcn.png" />
+                              <AvatarFallback>CN</AvatarFallback>
+                            </Avatar>
+                            <div className="grid flex-1 text-left text-sm leading-tight">
+                              <span className="truncate font-medium">
+                                Rohan Maindarkar
+                              </span>
+                              <span className="text-muted-foreground truncate text-xs">
+                                rohan@gmail.com
+                              </span>
+                            </div>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
                     <TableCell> {toLocalISODate(item.startDate)}</TableCell>
                     <TableCell>{toLocalISODate(item.endDate)}</TableCell>
-                    <TableCell>
-                      <Button
-                        size="sm"
-                        className={"cursor-pointer"}
-                        variant="outline"
-                      >
-                        Assign
-                      </Button>
-                    </TableCell>
+
                     <TableCell className={"space-x-2 flex"}>
                       <EditModel
                         title="Edit Task"
@@ -124,6 +163,7 @@ const UserPage = () => {
                         description="Do you want to delete your task"
                         icon={<Trash2 />}
                         taskId={item.id}
+                        onDelete={deleteTask}
                       />
                     </TableCell>
                   </TableRow>
@@ -165,4 +205,4 @@ const UserPage = () => {
   );
 };
 
-export default UserPage;
+export default TaskListPage;

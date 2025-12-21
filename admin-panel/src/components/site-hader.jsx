@@ -57,10 +57,10 @@ export function SiteHeader() {
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">
-                      {user && user.name}
+                      {(user && user.name) || "Lisa Konve"}
                     </span>
                     <span className="text-muted-foreground truncate text-xs">
-                      rohan@gmail.com
+                      {(user && user.email) || "Lisa@gmail.com"}
                     </span>
                   </div>
                 </div>

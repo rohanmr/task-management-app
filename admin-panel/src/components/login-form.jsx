@@ -18,7 +18,7 @@ import { loginUser } from "@/api/userApi";
 import { useContext, useState } from "react";
 import { userContext } from "@/context/userProvider";
 
-export function LoginForm({ className, ...props }) {
+export function LoginForm() {
   const [loading, setLoading] = useState(false);
   const {
     register,
@@ -30,7 +30,7 @@ export function LoginForm({ className, ...props }) {
 
   const { fetchUser } = useContext(userContext);
 
-  const handelLoginForm = async (data) => {
+  const handelLoginForm = (data) => {
     setLoading(true);
     loginUser(data).then((res) => {
       if (res.data.success) {
@@ -46,7 +46,7 @@ export function LoginForm({ className, ...props }) {
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("flex flex-col gap-6")}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8" onSubmit={handleSubmit(handelLoginForm)}>

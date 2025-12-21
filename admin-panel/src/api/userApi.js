@@ -3,7 +3,7 @@ import api from "@/api/apiAgent";
 
 const sleep = () => {
     return new Promise((resolve) => {
-        setTimeout(resolve, 3000);
+        setTimeout(resolve, 500);
     });
 };
 
@@ -24,3 +24,4 @@ export const getUserInfo = () => {
     return api.get("/user/getUserInfo")
 
 }
+

@@ -4,13 +4,14 @@ import {
   Users,
   Settings,
   CirclePlus,
+  List,
+  ClipboardList,
   Component,
 } from "lucide-react";
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -19,7 +20,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link } from "react-router-dom";
-import { NavUser } from "./nav-user";
 
 // Menu items.
 const items = [
@@ -34,10 +34,11 @@ const items = [
     icon: CirclePlus,
   },
   {
-    title: "Edite Task",
-    url: "/dashboard/edite-task",
-    icon: PencilIcon,
+    title: "Tasks List",
+    url: "/dashboard/all-tasks",
+    icon: List,
   },
+
   {
     title: "All Users",
     url: "/dashboard/users",
@@ -78,15 +79,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser
-          user={{
-            name: "Rohan Maidnakar",
-            email: "test",
-            avatar: "https://github.com/shadcn.png",
-          }}
-        />
-      </SidebarFooter>
     </Sidebar>
   );
 }

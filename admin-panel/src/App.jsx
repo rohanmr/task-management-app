@@ -7,8 +7,8 @@ import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
 import CreateTaskPage from "./pages/CreateTaskPage";
-import EditeTaskPage from "./pages/EditeTaskPage";
 import UsersPage from "./pages/UsersPage";
+import TaskListPage from "./pages/TaskListPage";
 
 function App() {
   return (
@@ -24,8 +24,9 @@ function App() {
             {/* Nested Routes*/}
             <Route path="home" element={<DahboardPage />} />
             <Route path="create-task" element={<CreateTaskPage />} />
-            <Route path="edite-task" element={<EditeTaskPage />} />
+
             <Route path="users" element={<UsersPage />} />
+            <Route path="all-tasks" element={<TaskListPage />} />
           </Route>
         </Route>
       </Routes>

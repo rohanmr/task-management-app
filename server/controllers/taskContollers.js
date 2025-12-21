@@ -1,19 +1,29 @@
 
 const Task = require("../models/taskModel")
 
-const { Op, where } = require('sequelize')
+const { Op } = require('sequelize')
 
 
 const createTask = async (req, res) => {
     const { title, description, status, priority, startDate, endDate } = req.body
+
     try {
-        const newTask = await Task.create({ title, description, status, priority, startDate, endDate, createdBy: req.user.id })
+        const startDateParts = startDate.split('/');
+        const formattedStartDate = startDateParts[2] + '-' + startDateParts[1] + '-' + startDateParts[0] + " 00:00:00Z";
+
+        const endDateParts = endDate.split('/');
+        const formattedEndDate = endDateParts[2] + '-' + endDateParts[1] + '-' + endDateParts[0] + " 00:00:00Z";
+
+
+        const newTask = await Task.create({ title, description, status, priority, startDate: formattedStartDate, endDate: formattedEndDate, createdBy: req.user.id })
+
         if (newTask) {
             return res.status(201).send({ msg: "Task Created Succesfully", success: true })
         } else {
             return res.send(202).send({ msg: "Error While Task Creating", success: false })
         }
     } catch (error) {
+        console.log(error)
         return res.status(500).send({ msg: "Internal Server Error", success: false })
 
     }
@@ -23,8 +33,8 @@ const createTask = async (req, res) => {
 
 const getAllTasks = async (req, res) => {
     try {
-        const tasks = await Task.findAll({ attributes: ['id', 'title', 'description', 'status', 'priority', 'startDate', 'endDate'] })
-        return res.status(200).send({ taks: tasks, success: true })
+        const tasks = await Task.findAll({ attributes: ['id', 'title', 'description', 'status', 'priority', 'startDate', 'endDate'], order: [["id", "DESC"]], })
+        return res.status(200).send({ tasks: tasks, success: true })
 
     } catch (error) {
         return res.status(500).send({ msg: "Internal Server Error", success: false })
