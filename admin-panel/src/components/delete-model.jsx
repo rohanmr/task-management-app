@@ -16,7 +16,7 @@ import { Spinner } from "@/components/ui/spinner";
 export function DeleteModel({
   title,
   description,
-  taskId,
+  actionId,
   icon,
   onDelete,
   onSuccess,
@@ -27,11 +27,11 @@ export function DeleteModel({
   const handleDelete = async () => {
     setLoading(true);
     try {
-      const res = await onDelete(taskId);
+      const res = await onDelete(actionId);
 
       if (res?.data?.success) {
         toast.success(res.data.msg);
-        onSuccess?.(taskId);
+        onSuccess?.(actionId);
         setOpen(false);
       } else {
         toast.error(res?.data?.msg || "Delete failed");
@@ -63,7 +63,11 @@ export function DeleteModel({
         <DialogDescription>{description}</DialogDescription>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
+          <Button
+            className={"cursor-pointer"}
+            variant="outline"
+            onClick={() => setOpen(false)}
+          >
             Cancel
           </Button>
 
@@ -72,7 +76,7 @@ export function DeleteModel({
             className="cursor-pointer hover:bg-red-700"
             disabled={loading}
             onClick={() => {
-              handleDelete(taskId);
+              handleDelete(actionId);
             }}
           >
             {loading ? (

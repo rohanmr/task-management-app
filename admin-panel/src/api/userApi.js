@@ -25,3 +25,23 @@ export const getUserInfo = () => {
 
 }
 
+//Get All Users 
+export const getAllUsers = async () => {
+    await sleep()
+    return api.get("/user/getAllUsers")
+
+}
+
+//Delete User
+export const deleteUser = async (userID) => {
+    await sleep();
+    return api.delete(`/user/deleteUser/${userID}`)
+}
+
+//Update user
+
+export const updateUser = async (userID, data) => {
+    await sleep()
+    return api.put(`/user/updateUser/${userID}`, data)
+
+}

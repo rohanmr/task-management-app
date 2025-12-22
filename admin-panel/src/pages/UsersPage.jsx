@@ -1,4 +1,3 @@
-import { getAllTasks } from "@/api/taskAPI";
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -9,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { PencilIcon, Trash2 } from "lucide-react";
+import { PencilIcon, Trash2, User } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 
 import {
@@ -21,10 +20,12 @@ import {
 } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
-// import { EditModel } from "@/components/edit-task-model";
-import { DeleteModel } from "@/components/delete-model";
 
-const ITEMS_PER_PAGE = 6;
+import { DeleteModel } from "@/components/delete-model";
+import { deleteUser, getAllUsers } from "@/api/userApi";
+import { EditUserModel } from "@/components/edit-user-model";
+
+const ITEMS_PER_PAGE = 8;
 
 const UserPage = () => {
   const [loading, setLoaing] = useState(false);
@@ -39,11 +40,11 @@ const UserPage = () => {
 
   const currentData = userList.slice(startIndex, endIndex);
 
-  const fetchTasks = async () => {
+  const fetchUsers = async () => {
     setLoaing(true);
     try {
-      const res = await getAllTasks();
-      setUserList(res.data.tasks);
+      const res = await getAllUsers();
+      setUserList(res.data.users);
       setLoaing(false);
     } catch (error) {
       console.error("Failed to fetch tasks", error);
@@ -51,15 +52,20 @@ const UserPage = () => {
     }
   };
 
-  const toLocalISODate = (date) => {
-    if (!date) return "-";
-    const d = new Date(date);
-    const offset = d.getTimezoneOffset() * 60000;
-    return new Date(d.getTime() - offset).toISOString().split("T")[0];
+  const handelDeleteSuccess = (deletedId) => {
+    return setUserList((prv) => prv.filter((user) => user.id !== deletedId));
+  };
+
+  const handelUpdateSuccess = (updatedUser) => {
+    return setUserList((prev) =>
+      prev.map((user) =>
+        user.id === updatedUser.id ? { ...user, ...updatedUser } : user
+      )
+    );
   };
 
   useEffect(() => {
-    fetchTasks();
+    fetchUsers();
   }, []);
 
   return (
@@ -79,13 +85,11 @@ const UserPage = () => {
             <Table className="w-full">
               <TableHeader>
                 <TableRow>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Priority</TableHead>
-                  <TableHead>Start Date</TableHead>
-                  <TableHead>End Date</TableHead>
-                  <TableHead>Assign Task</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Contact No</TableHead>
+                  <TableHead>Address</TableHead>
+                  <TableHead>Task Status</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -94,37 +98,52 @@ const UserPage = () => {
                 {currentData.map((item, i) => (
                   <TableRow key={item.id}>
                     <TableCell className="font-medium max-w-56 truncate">
-                      <span title={item.title}>{item.title}</span>
+                      <span
+                        title={item.name}
+                        className="flex items-center gap-2"
+                      >
+                        <User className="size-5" />
+                        {item.name}
+                      </span>
                     </TableCell>
                     <TableCell className="max-w-60 truncate">
-                      <span title={item.description}>{item.description}</span>
+                      <span title={item.email}>{item.email}</span>
                     </TableCell>
-                    <TableCell>{item.status}</TableCell>
-                    <TableCell>{item.priority}</TableCell>
-                    <TableCell> {toLocalISODate(item.startDate)}</TableCell>
-                    <TableCell>{toLocalISODate(item.endDate)}</TableCell>
+                    <TableCell>{item.contactNumber || 123456789}</TableCell>
+                    <TableCell
+                      title={item.address}
+                      className="max-w-60 truncate"
+                    >
+                      {item.address}
+                    </TableCell>
                     <TableCell>
                       <Button
                         size="sm"
                         className={"cursor-pointer"}
                         variant="outline"
                       >
-                        Assign
+                        Unassign
                       </Button>
                     </TableCell>
                     <TableCell className={"space-x-2 flex"}>
-                      <PencilIcon />
-                      {/* <EditModel
-                        title="Edit Task"
-                        description="Make changes in your task here."
+                      <EditUserModel
                         icon={<PencilIcon />}
-                        taskId={item.id}
-                      /> */}
+                        discription="Make changes in your user here."
+                        userId={item.id}
+                        title="Edit User"
+                        name={item.name}
+                        email={item.email}
+                        contactNumber={item.contactNumber}
+                        address={item.address}
+                        onSuccess={handelUpdateSuccess}
+                      />
                       <DeleteModel
                         title="Delete Task"
-                        description="Do you want to delete your task"
+                        description="Do you want to delete your user"
                         icon={<Trash2 />}
-                        taskId={item.id}
+                        actionId={item.id}
+                        onDelete={deleteUser}
+                        onSuccess={handelDeleteSuccess}
                       />
                     </TableCell>
                   </TableRow>
@@ -133,7 +152,7 @@ const UserPage = () => {
             </Table>
           )}
 
-          <div className="flex items-center justify-between px-2 py-3">
+          <div className="flex items-center justify-between px-2 pt-1">
             <p className="text-sm text-muted-foreground">
               Page {currentPage} of {totalPages}
             </p>

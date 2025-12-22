@@ -20,9 +20,9 @@ export const getAllTasks = async () => {
 }
 
 //Delete Task
-export const deleteTask = async (data) => {
+export const deleteTask = async (id) => {
     await sleep()
-    return api.delete(`tasks/deleteTask/${data}`)
+    return api.delete(`tasks/deleteTask/${id}`)
 }
 
 //Update Task
@@ -30,3 +30,7 @@ export const updateTask = async (taskId, data) => {
     await sleep()
     return api.put(`tasks/updateTask/${taskId}`, data)
 }
+
+export const assignTask = async (data) => {
+    return api.post("/assign/assignTask", data);
+};

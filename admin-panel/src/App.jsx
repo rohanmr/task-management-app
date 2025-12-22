@@ -9,6 +9,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import CreateTaskPage from "./pages/CreateTaskPage";
 import UsersPage from "./pages/UsersPage";
 import TaskListPage from "./pages/TaskListPage";
+import SettingPage from "./pages/SettingPage";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
 
             <Route path="users" element={<UsersPage />} />
             <Route path="all-tasks" element={<TaskListPage />} />
+            <Route path="settings" element={<SettingPage />} />
           </Route>
         </Route>
       </Routes>

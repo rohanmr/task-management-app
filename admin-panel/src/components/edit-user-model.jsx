@@ -14,19 +14,20 @@ import { toast } from "react-toastify";
 
 import { FieldGroup } from "@/components/ui/field";
 import TextInput from "@/components/TextInput";
-import SelectInput from "@/components/SelectInput";
-import { useForm } from "react-hook-form";
-import { updateTask } from "@/api/taskAPI";
-import { Spinner } from "@/components/ui/spinner";
 
-export function EditTaskModel({
+import { useForm } from "react-hook-form";
+
+import { Spinner } from "@/components/ui/spinner";
+import { updateUser } from "@/api/userApi";
+
+export function EditUserModel({
   title,
-  startDate,
-  endDate,
-  existingTitle,
-  taskId,
-  priority,
-  status,
+  name,
+  email,
+  address,
+  contactNumber,
+  userId,
+  discription,
   icon,
   onSuccess,
 }) {
@@ -40,25 +41,23 @@ export function EditTaskModel({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      status: status,
-      priority: priority,
-      startDate: startDate,
-      endDate: endDate,
+      name: name,
+      email: email,
+      contactNumber: contactNumber,
+      address: address,
     },
   });
-  const statusOption = ["Pending", "InProgress", "Completed"];
-  const priorityOprion = ["Low", "Medium", "High", "Critical"];
 
-  const handelUpdateTaskForm = async (data) => {
+  const handelUpdateUserForm = async (data) => {
     setLoading(true);
 
     try {
-      const res = await updateTask(taskId, data);
+      const res = await updateUser(userId, data);
 
       if (res.data.success) {
         toast.success(res.data.msg);
         onSuccess?.({
-          id: taskId,
+          id: userId,
           ...data,
         });
         setOpen(false);
@@ -73,12 +72,7 @@ export function EditTaskModel({
   };
 
   useEffect(() => {
-    reset({
-      status,
-      priority,
-      startDate,
-      endDate,
-    });
+    reset();
   }, [open]);
 
   return (
@@ -90,51 +84,45 @@ export function EditTaskModel({
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-106.25">
-        <form onSubmit={handleSubmit(handelUpdateTaskForm)}>
+        <form onSubmit={handleSubmit(handelUpdateUserForm)}>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription className="font-medium text-base py-3">
-              Title - {existingTitle}
+              {discription}
             </DialogDescription>
           </DialogHeader>
 
           <FieldGroup className="gap-4">
-            <div className="grid grid-cols-2 gap-5">
-              <SelectInput
-                control={control}
-                label="Status"
-                name="status"
-                options={statusOption}
-              />
-              <SelectInput
-                control={control}
-                label="Priority"
-                name="priority"
-                options={priorityOprion}
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-5">
-              <TextInput
-                name="startDate"
-                label="Start Date"
-                placeholder="dd/mm/yyyy"
-                control={control}
-              />
-              <TextInput
-                name="endDate"
-                label="End Date"
-                placeholder="dd/mm/yyyy"
-                control={control}
-              />
-            </div>
+            <TextInput
+              name="name"
+              label="Name"
+              placeholder="Enter your name"
+              control={control}
+            />
+            <TextInput
+              name="email"
+              label="Email"
+              placeholder="Enter Your email"
+              control={control}
+            />
+            <TextInput
+              name="contactNumber"
+              label="Contact Number"
+              placeholder="Enter your number"
+              control={control}
+            />
+            <TextInput
+              name="address"
+              label="Address"
+              placeholder="Enter your Address"
+              control={control}
+            />
           </FieldGroup>
 
           <DialogFooter className={"pt-6"}>
             <Button
               type="button"
               variant="outline"
-              className={"cursor-pointer"}
               onClick={() => setOpen(false)}
             >
               Cancel

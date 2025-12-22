@@ -2,6 +2,7 @@ const User = require('../models/userModel')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+
 const register = async (req, res) => {
     const { name, email, password, contactNumber, address } = req.body
     try {
@@ -62,7 +63,7 @@ const login = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
     try {
-        const users = await User.findAll({ attributes: ['id', 'name', 'email', 'address'] })
+        const users = await User.findAll({ attributes: ['id', 'name', 'email', 'address', 'contactNumber'], where: { role: "user" } })
         return res.status(200).send({ users: users, success: true })
 
     } catch (error) {
@@ -95,10 +96,10 @@ const getUserInfo = async (req, res) => {
 const updateUser = async (req, res) => {
 
     const ID = req.params.ID
-    const { name, contactNumber, address } = req.body
+    const { name, email, contactNumber, address } = req.body
 
     try {
-        const [updatedUser] = await User.update({ name, contactNumber, address }, { where: { id: ID } })
+        const [updatedUser] = await User.update({ name, email, contactNumber, address }, { where: { id: ID } })
 
         if (updatedUser === 0) {
             return res.status(404).send({ msg: "User Not Found" })

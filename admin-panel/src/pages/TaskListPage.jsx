@@ -1,5 +1,5 @@
-import { getAllTasks, updateTask } from "@/api/taskAPI";
-import React, { useEffect, useState } from "react";
+import { assignTask, getAllTasks, updateTask } from "@/api/taskAPI";
+import React, { useContext, useEffect, useState } from "react";
 import { deleteTask } from "@/api/taskAPI";
 
 import {
@@ -10,8 +10,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import { Spinner } from "@/components/ui/spinner";
+import { toast } from "react-toastify";
 
 import { PencilIcon, Trash2, EllipsisVertical } from "lucide-react";
 import {
@@ -34,6 +35,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { EditTaskModel } from "@/components/edit-task-model";
 import { DeleteModel } from "@/components/delete-model";
+import { Badge } from "@/components/ui/badge";
+import UserAvatar from "@/components/user-avatar";
+import { userContext } from "@/context/userProvider";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -41,6 +45,7 @@ const TaskListPage = () => {
   const [loading, setLoaing] = useState(false);
   const [taskList, setTaskList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const { allUsers, fetchAllUsers } = useContext(userContext);
 
   const totalData = taskList.length;
   const totalPages = Math.ceil(totalData / ITEMS_PER_PAGE);
@@ -74,6 +79,25 @@ const TaskListPage = () => {
     );
   };
 
+  const handleAssignUser = async (userId, taskId) => {
+    const data = {
+      taskId: taskId,
+      userId: userId,
+    };
+
+    try {
+      const res = await assignTask(data);
+
+      if (res.data.success) {
+        toast.success(res.data.msg);
+      } else {
+        toast.error(res.data.msg || "Failed to assign task");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
+
   const toLocalISODate = (date) => {
     if (!date) return "-";
     const d = new Date(date);
@@ -83,6 +107,7 @@ const TaskListPage = () => {
 
   useEffect(() => {
     fetchTasks();
+    fetchAllUsers();
   }, []);
 
   return (
@@ -123,8 +148,62 @@ const TaskListPage = () => {
                     <TableCell className="max-w-60 truncate">
                       <span title={item.description}>{item.description}</span>
                     </TableCell>
-                    <TableCell>{item.status}</TableCell>
-                    <TableCell>{item.priority}</TableCell>
+                    <TableCell>
+                      {item.status === "Pending" ? (
+                        <Badge
+                          variant="secondary"
+                          className="bg-gray-500 text-white dark:bg-gray-300"
+                        >
+                          {item.status}
+                        </Badge>
+                      ) : item.status === "InProgress" ? (
+                        <Badge
+                          variant="secondary"
+                          className="bg-yellow-500 text-white dark:bg-yellow-600"
+                        >
+                          {item.status}
+                        </Badge>
+                      ) : (
+                        <Badge
+                          variant="secondary"
+                          className="bg-green-500 text-white dark:bg-green-600"
+                        >
+                          {item.status}
+                        </Badge>
+                      )}
+                    </TableCell>
+
+                    <TableCell>
+                      {item.priority === "Low" ? (
+                        <Badge
+                          variant="secondary"
+                          className="bg-green-100 text-green-700"
+                        >
+                          {item.priority}
+                        </Badge>
+                      ) : item.priority === "Medium" ? (
+                        <Badge
+                          variant="secondary"
+                          className="bg-yellow-100 text-yellow-700"
+                        >
+                          {item.priority}
+                        </Badge>
+                      ) : item.priority === "High" ? (
+                        <Badge
+                          variant="secondary"
+                          className="bg-orange-100 text-orange-700"
+                        >
+                          {item.priority}
+                        </Badge>
+                      ) : (
+                        <Badge
+                          variant="secondary"
+                          className="bg-red-100 text-red-700"
+                        >
+                          {item.priority}
+                        </Badge>
+                      )}
+                    </TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -143,20 +222,14 @@ const TaskListPage = () => {
                             Assign Task To User
                           </DropdownMenuLabel>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem>
-                            <Avatar className="cursor-pointer">
-                              <AvatarImage src="https://github.com/shadcn.png" />
-                              <AvatarFallback>CN</AvatarFallback>
-                            </Avatar>
-                            <div className="grid flex-1 text-left text-sm leading-tight">
-                              <span className="truncate font-medium">
-                                Rohan Maindarkar
-                              </span>
-                              <span className="text-muted-foreground truncate text-xs">
-                                rohan@gmail.com
-                              </span>
-                            </div>
-                          </DropdownMenuItem>
+                          {allUsers.map((user) => (
+                            <DropdownMenuItem
+                              key={user.id}
+                              onClick={() => handleAssignUser(user.id, item.id)}
+                            >
+                              <UserAvatar email={user.email} name={user.name} />
+                            </DropdownMenuItem>
+                          ))}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -179,7 +252,7 @@ const TaskListPage = () => {
                         title="Delete Task"
                         description="Do you want to delete your task"
                         icon={<Trash2 />}
-                        taskId={item.id}
+                        actionId={item.id}
                         onDelete={deleteTask}
                         onSuccess={handelDeleteSuccess}
                       />
