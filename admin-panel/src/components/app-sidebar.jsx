@@ -5,7 +5,7 @@ import {
   Settings,
   CirclePlus,
   List,
-  ClipboardList,
+  ListChecks,
   Component,
 } from "lucide-react";
 
@@ -45,6 +45,11 @@ const items = [
     icon: Users,
   },
   {
+    title: "Assigned Task",
+    url: "/dashboard/assigned-tasks",
+    icon: ListChecks,
+  },
+  {
     title: "Settings",
     url: "/dashboard/settings",
     icon: Settings,
@@ -60,7 +65,7 @@ export function AppSidebar() {
             <Component size={32} />
             <span className="text-base text-center py-5 font-semibold">
               {" "}
-              Task Management System
+              TMS Software
             </span>
           </SidebarGroupLabel>
           <SidebarGroupContent className="px-2 mt-4">

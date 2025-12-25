@@ -89,7 +89,7 @@ const UserPage = () => {
                   <TableHead>Email</TableHead>
                   <TableHead>Contact No</TableHead>
                   <TableHead>Address</TableHead>
-                  <TableHead>Task Status</TableHead>
+                  {/* <TableHead>Task Status</TableHead> */}
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -116,7 +116,7 @@ const UserPage = () => {
                     >
                       {item.address}
                     </TableCell>
-                    <TableCell>
+                    {/* <TableCell>
                       <Button
                         size="sm"
                         className={"cursor-pointer"}
@@ -124,7 +124,7 @@ const UserPage = () => {
                       >
                         Unassign
                       </Button>
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell className={"space-x-2 flex"}>
                       <EditUserModel
                         icon={<PencilIcon />}

@@ -38,6 +38,9 @@ export function SiteHeader() {
         />
         <h1 className="text-base font-medium">Dashboard</h1>
         <div className="ml-auto flex items-center gap-2">
+          <div className="capitalize text-base">
+            Role:<span> {user?.role || "User"}</span>{" "}
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="cursor-pointer">

@@ -10,6 +10,7 @@ import CreateTaskPage from "./pages/CreateTaskPage";
 import UsersPage from "./pages/UsersPage";
 import TaskListPage from "./pages/TaskListPage";
 import SettingPage from "./pages/SettingPage";
+import AssignedTasksPage from "./pages/AssignedTasksPage";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="users" element={<UsersPage />} />
             <Route path="all-tasks" element={<TaskListPage />} />
             <Route path="settings" element={<SettingPage />} />
+            <Route path="assigned-tasks" element={<AssignedTasksPage />} />
           </Route>
         </Route>
       </Routes>

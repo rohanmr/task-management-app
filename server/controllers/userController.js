@@ -8,7 +8,7 @@ const register = async (req, res) => {
     try {
 
         if (!name || !email || !password) {
-            return res.status(202).send({ msg: "Please provide name, email and password", success: false })
+            return res.status(400).send({ msg: "Please provide name, email and password", success: false })
         }
 
         const existingUser = await User.findOne({ where: { email } })
@@ -33,7 +33,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     const { email, password } = req.body
     try {
-        const getUser = await User.findOne({ where: { email } })
+        const getUser = await User.findOne({ where: { email: email } })
 
         if (!getUser) {
             return res.status(202).send({ msg: "Invalid credentials", success: false })

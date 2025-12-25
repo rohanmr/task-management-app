@@ -1,4 +1,5 @@
 
+
 const { User } = require('../models')
 const AssignTask = require('../models/assginTaskModel')
 const Task = require('../models/taskModel')
@@ -24,6 +25,7 @@ const assignTask = async (req, res) => {
 const getTaskByUsers = async (req, res) => {
     try {
         const assignedTask = await AssignTask.findAll({
+
             include: [
                 {
                     model: Task,
@@ -34,10 +36,18 @@ const getTaskByUsers = async (req, res) => {
                     model: User,
                     as: 'assignedBy',
                     attributes: ['name', 'role']
+                },
+                {
+                    model: User,
+                    as: "user",
+                    attributes: ['name', 'email']
                 }
 
-            ]
+            ],
+            attributes: ['id', 'taskId', 'userId', 'updatedBy'],
+            order: [['taskId', 'DESC']]
         })
+
         return res.status(200).send({ assignedTasks: assignedTask })
 
     } catch (error) {

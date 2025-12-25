@@ -34,3 +34,8 @@ export const updateTask = async (taskId, data) => {
 export const assignTask = async (data) => {
     return api.post("/assign/assignTask", data);
 };
+
+export const getAllAssignTask = async () => {
+    await sleep()
+    return api.get("/assign/getTaskByUsers")
+}
