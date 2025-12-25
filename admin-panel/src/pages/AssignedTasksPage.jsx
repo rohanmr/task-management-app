@@ -29,7 +29,7 @@ import { getAllAssignTask } from "@/api/taskAPI";
 const ITEMS_PER_PAGE = 8;
 
 const AssignedTasksPage = () => {
-  const [loading, setLoaing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [userTaskList, setUserTaskList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -44,14 +44,14 @@ const AssignedTasksPage = () => {
   console.log(currentData);
 
   const fetchTasksOfUsers = async () => {
-    setLoaing(true);
+    setLoading(true);
     try {
       const res = await getAllAssignTask();
       setUserTaskList(res.data.assignedTasks);
-      setLoaing(false);
+      setLoading(false);
     } catch (error) {
       console.error("Failed to fetch tasks", error);
-      setLoaing(false);
+      setLoading(false);
     }
   };
 
