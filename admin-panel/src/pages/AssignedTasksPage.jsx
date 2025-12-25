@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 
 import { DeleteModel } from "@/components/delete-model";
 
-import { getAllAssignTask } from "@/api/taskAPI";
+import { deleteAssignedTask, getAllAssignTask } from "@/api/taskAPI";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -41,7 +41,7 @@ const AssignedTasksPage = () => {
 
   const currentData = userTaskList.slice(startIndex, endIndex);
 
-  console.log(currentData);
+  console.log(userTaskList);
 
   const fetchTasksOfUsers = async () => {
     setLoading(true);
@@ -56,7 +56,9 @@ const AssignedTasksPage = () => {
   };
 
   const handelDeleteSuccess = (deletedId) => {
-    return setUserList((prv) => prv.filter((user) => user.id !== deletedId));
+    return setUserTaskList((prv) =>
+      prv.filter((task) => task.id !== deletedId)
+    );
   };
 
   useEffect(() => {
@@ -172,7 +174,7 @@ const AssignedTasksPage = () => {
                         description="Do you want to delete your Assigned Task"
                         icon={<Trash2 />}
                         actionId={item.id}
-                        // onDelete={deleteUser}
+                        onDelete={deleteAssignedTask}
                         onSuccess={handelDeleteSuccess}
                       />
                     </TableCell>

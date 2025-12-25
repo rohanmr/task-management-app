@@ -17,10 +17,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useContext } from "react";
 import { userContext } from "@/context/userProvider";
+import { Spinner } from "./ui/spinner";
 
 export function SiteHeader() {
   const navigate = useNavigate();
-  const { user } = useContext(userContext);
+  const { user, loading } = useContext(userContext);
 
   const handelLogout = () => {
     localStorage.removeItem("token");
@@ -39,7 +40,13 @@ export function SiteHeader() {
         <h1 className="text-base font-medium">Dashboard</h1>
         <div className="ml-auto flex items-center gap-2">
           <div className="capitalize text-base">
-            Role:<span> {user?.role || "User"}</span>{" "}
+            {loading ? (
+              <Spinner />
+            ) : (
+              <>
+                Role:<span> {user?.role || "User"}</span>
+              </>
+            )}
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

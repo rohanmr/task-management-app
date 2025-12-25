@@ -1,12 +1,13 @@
 import { getAllUsers, getUserInfo } from "@/api/userApi";
 
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const userContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchUser = async () => {
     const res = await getUserInfo();
@@ -18,8 +19,19 @@ const UserProvider = ({ children }) => {
     setAllUsers(res.data.users);
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    fetchUser();
+  }, []);
+
   return (
-    <userContext.Provider value={{ user, fetchUser, allUsers, fetchAllUsers }}>
+    <userContext.Provider
+      value={{ user, fetchUser, allUsers, fetchAllUsers, loading }}
+    >
       {children}
     </userContext.Provider>
   );

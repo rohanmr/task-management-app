@@ -39,3 +39,9 @@ export const getAllAssignTask = async () => {
     await sleep()
     return api.get("/assign/getTaskByUsers")
 }
+
+export const deleteAssignedTask = async (id) => {
+    await sleep()
+    return api.delete(`/assign/deleteAssignTask/${id}`)
+
+}
