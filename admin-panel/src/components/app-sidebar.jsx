@@ -1,5 +1,4 @@
 import {
-  PencilIcon,
   Home,
   Users,
   Settings,
@@ -65,7 +64,7 @@ export function AppSidebar() {
             <Component size={32} />
             <span className="text-base text-center py-5 font-semibold">
               {" "}
-              TMS Software
+              PTMS Software
             </span>
           </SidebarGroupLabel>
           <SidebarGroupContent className="px-2 mt-4">

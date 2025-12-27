@@ -72,7 +72,9 @@ const CreateTaskPage = () => {
                       <h1 className="text-2xl font-bold">Creating Task...</h1>
                     </div>
                   ) : (
-                    <h1 className="text-2xl font-bold">Create your Task</h1>
+                    <h1 className="text-2xl font-bold">
+                      Create your Project Task
+                    </h1>
                   )}
 
                   <p className="text-muted-foreground text-sm text-balance">

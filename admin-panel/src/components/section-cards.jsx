@@ -43,7 +43,7 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>Pending Tasks</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            40
+            10
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
@@ -59,7 +59,7 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>Completd Taks</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            20
+            10
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
