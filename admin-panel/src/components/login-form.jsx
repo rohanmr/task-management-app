@@ -54,7 +54,7 @@ export function LoginForm() {
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
                 <p className="text-muted-foreground text-balance">
-                  Login to your TMS
+                  Login to your PTMS
                 </p>
               </div>
               <Field>
@@ -86,7 +86,6 @@ export function LoginForm() {
                   id="password"
                   type="password"
                   placeholder="Enter your password"
-                  password="Anshu@123"
                   {...register("password", {
                     required: "Password is required",
                     minLength: {

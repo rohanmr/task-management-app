@@ -7,7 +7,7 @@ const auth = (req, res, next) => {
     const fullToken = req.headers.authorization
 
     if (!fullToken) {
-        return res.status(400).send({ msg: "Authorization Header Missign" })
+        return res.status(400).send({ msg: "Authorization Header Missing" })
     }
 
     if (fullToken.startsWith("Bearer ")) {
@@ -29,7 +29,7 @@ const admin = (req, res, next) => {
     if (req.user && req.user.role === 'admin') {
         return next()
     }
-    return res.status(403).send({ msg: "Not Authorised" })
+    return res.status(403).send({ msg: "Not Authorized" })
 
 }
 

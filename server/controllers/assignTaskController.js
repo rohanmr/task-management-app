@@ -125,7 +125,7 @@ const deleteAssignTask = async (req, res) => {
             return res.status(202).send({ msg: "Task not found" })
         }
 
-        return res.status(200).send({ msg: "Assigned Task deleted suucessfully", success: true })
+        return res.status(200).send({ msg: "Assigned Task deleted successfully", success: true })
 
     } catch (error) {
         return res.status(500).send({ msg: "Internal Server Error", success: false })

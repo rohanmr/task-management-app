@@ -9,10 +9,10 @@ const router = express.Router()
 router.post('/assignTask', auth, admin, assignTaskController.assignTask)
 
 // get all tasks by user /getTasksByUsers
-router.get('/getTaskByUsers', auth, assignTaskController.getTaskByUsers)
+router.get('/getTaskByUsers', auth, admin, assignTaskController.getTaskByUsers)
 
 // /getTasksByUserId/:userID
-router.get('/getTaskByUser/:userId', auth, admin, assignTaskController.getTaskByUserID)
+router.get('/getTaskBySingleUser/:userId', auth, assignTaskController.getTaskByUserID)
 
 // /updateAssignTask
 

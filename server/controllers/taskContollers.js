@@ -18,7 +18,7 @@ const createTask = async (req, res) => {
         const newTask = await Task.create({ title, description, status, priority, startDate: formattedStartDate, endDate: formattedEndDate, createdBy: req.user.id })
 
         if (newTask) {
-            return res.status(201).send({ msg: "Task Created Succesfully", success: true })
+            return res.status(201).send({ msg: "Task Created Successfully", success: true })
         } else {
             return res.send(202).send({ msg: "Error While Task Creating", success: false })
         }

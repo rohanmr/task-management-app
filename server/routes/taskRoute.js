@@ -26,7 +26,7 @@ router.get('/completedBetween', auth, admin, taskController.getTasksCompletedBet
 
 //Added New Api
 
-router.patch("/statusUpdate/:ID", auth, admin, taskController.statusUpdate)
+router.patch("/statusUpdate/:ID", auth, taskController.statusUpdate)
 
 
 

@@ -1,7 +1,9 @@
-import React from "react";
+import { userContext } from "@/context/userProvider";
+import React, { useContext } from "react";
 
 const SettingPage = () => {
-  return <div>Admin Settings</div>;
+  const {user} = useContext(userContext);
+  return <div className="capitalize">{user.role} Settings</div>;
 };
 
 export default SettingPage;

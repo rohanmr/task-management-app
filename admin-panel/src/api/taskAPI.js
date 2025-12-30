@@ -31,6 +31,11 @@ export const updateTask = async (taskId, data) => {
     return api.put(`tasks/updateTask/${taskId}`, data)
 }
 
+export const statusUpdate = async (taskId, data) => {
+    await sleep()
+    return api.patch(`tasks/statusUpdate/${taskId}`, data)
+}
+
 export const assignTask = async (data) => {
     return api.post("/assign/assignTask", data);
 };
@@ -44,4 +49,9 @@ export const deleteAssignedTask = async (id) => {
     await sleep()
     return api.delete(`/assign/deleteAssignTask/${id}`)
 
+}
+
+export const getTaskByUser = async (userID) => {
+    await sleep()
+    return api.get(`/assign/getTaskBySingleUser/${userID}`)
 }

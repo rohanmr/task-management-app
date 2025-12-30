@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Trash2, User } from "lucide-react";
+import { PencilIcon, Trash2, User } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { Badge } from "@/components/ui/badge";
 
@@ -24,15 +24,17 @@ import { Button } from "@/components/ui/button";
 
 import { DeleteModel } from "@/components/delete-model";
 
-import { deleteAssignedTask, getAllAssignTask } from "@/api/taskAPI";
+import { deleteAssignedTask, getTaskByUser } from "@/api/taskAPI";
+import { userContext } from "@/context/userProvider";
+import { StatusUpadteModel } from "@/components/status-update-model";
 
 const ITEMS_PER_PAGE = 8;
 
-const AssignedTasksPage = () => {
+const AssignedTasksToUserPage = () => {
   const [loading, setLoading] = useState(false);
   const [userTaskList, setUserTaskList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const { user } = useContext(userContext);
   const totalData = userTaskList.length;
   const totalPages = Math.ceil(totalData / ITEMS_PER_PAGE);
 
@@ -41,10 +43,12 @@ const AssignedTasksPage = () => {
 
   const currentData = userTaskList.slice(startIndex, endIndex);
 
-  const fetchTasksOfUsers = async () => {
+  const fetchTasksOfUser = async () => {
+    if (!user?.id) return;
     setLoading(true);
     try {
-      const res = await getAllAssignTask();
+      const res = await getTaskByUser(user?.id);
+
       setUserTaskList(res.data.assignedTasks);
       setLoading(false);
     } catch (error) {
@@ -53,22 +57,38 @@ const AssignedTasksPage = () => {
     }
   };
 
-  const handelDeleteSuccess = (deletedId) => {
-    return setUserTaskList((prv) =>
-      prv.filter((task) => task.id !== deletedId)
+  const handelUpdateSuccess = (updatedTask) => {
+    return setUserTaskList((prev) =>
+      prev.map((item) =>
+        item.task.id === updatedTask.id
+          ? {
+              ...item,
+              task: {
+                ...item.task,
+                ...updatedTask,
+              },
+            }
+          : item
+      )
     );
+  };
+  const toLocalISODate = (date) => {
+    if (!date) return "-";
+    const d = new Date(date);
+    const offset = d.getTimezoneOffset() * 60000;
+    return new Date(d.getTime() - offset).toISOString().split("T")[0];
   };
 
   useEffect(() => {
-    fetchTasksOfUsers();
-  }, []);
+    fetchTasksOfUser();
+  }, [user?.id]);
 
   return (
     <>
       <Card className="flex flex-col">
         <CardHeader className="items-center pb-0">
           <CardTitle>All Assigned Task List</CardTitle>
-          <CardDescription>Users have assigned tasks</CardDescription>
+          <CardDescription>Your assigned Tasks</CardDescription>
         </CardHeader>
 
         <CardContent className="flex-1 pb-0">
@@ -80,20 +100,23 @@ const AssignedTasksPage = () => {
             <Table className="w-full">
               <TableHeader>
                 <TableRow>
-                  <TableHead>User Name</TableHead>
-                  <TableHead>Email</TableHead>
+                  {/* <TableHead>User Name</TableHead>
+                  <TableHead>Email</TableHead> */}
                   <TableHead>Task Title</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Priority</TableHead>
+                  <TableHead>Start Date</TableHead>
+                  <TableHead>End Date</TableHead>
+
                   <TableHead>Assigned By</TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead className={"text-center"}>Actions</TableHead>
                 </TableRow>
               </TableHeader>
 
               <TableBody>
                 {currentData.map((item, i) => (
                   <TableRow key={item.id}>
-                    <TableCell className="font-medium max-w-56 truncate">
+                    {/* <TableCell className="font-medium max-w-56 truncate">
                       <span
                         title={item.user.name}
                         className="flex items-center gap-2"
@@ -104,7 +127,7 @@ const AssignedTasksPage = () => {
                     </TableCell>
                     <TableCell>
                       <span title={item.user.email}>{item.user.email}</span>
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell className="max-w-60 truncate">
                       {item.task.title}
                     </TableCell>
@@ -163,17 +186,26 @@ const AssignedTasksPage = () => {
                         </Badge>
                       )}
                     </TableCell>
+                    <TableCell>{toLocalISODate(item.task.startDate)}</TableCell>
+                    <TableCell>{toLocalISODate(item.task.endDate)}</TableCell>
 
                     <TableCell>{item.assignedBy.name}</TableCell>
 
                     <TableCell className={"flex justify-center"}>
-                      <DeleteModel
-                        title="Delete Task"
-                        description="Do you want to delete your Assigned Task"
-                        icon={<Trash2 />}
-                        actionId={item.id}
-                        onDelete={deleteAssignedTask}
-                        onSuccess={handelDeleteSuccess}
+                      {/* <Button
+                        size="sm"
+                        className="cursor-pointer"
+                        variant="outline"
+                      >
+                        <PencilIcon />
+                      </Button> */}
+                      <StatusUpadteModel
+                        status={item.task.status}
+                        title="Update Task Status"
+                        onSuccess={handelUpdateSuccess}
+                        taskId={item.task.id}
+                        existingTitle={item.task.title}
+                        icon={<PencilIcon />}
                       />
                     </TableCell>
                   </TableRow>
@@ -215,4 +247,4 @@ const AssignedTasksPage = () => {
   );
 };
 
-export default AssignedTasksPage;
+export default AssignedTasksToUserPage;
